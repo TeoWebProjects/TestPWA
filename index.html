@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="apple-touch-icon" href="/icon-192x192.png" />
+    <link rel="apple-touch-icon" href="/icon-384x384.png" />
+    <link rel="apple-touch-icon" href="/icon-512x512.png" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Hello World!</h1>
+    <h1>testing...</h1>
+    <button id="installBtn" onclick="install()" disabled>Install PWA</button>
+  </body>
+</html>
+
+<script>
+  //   const cacheName = 'cache'
+
+  //   self.addEventListener('fetch', function (event) {
+  //     event.respondWith(
+  //       (async function () {
+  //         try {
+  //           var res = await fetch(event.request)
+  //           var cache = await caches.open(cacheName)
+  //           cache.put(event.request.url, res.clone())
+  //           return res
+  //         } catch (error) {
+  //           return caches.match(event.request)
+  //         }
+  //       })()
+  //     )
+  //   })
+
+  //   self.addEventListener('activate', function (event) {
+  //     event.waitUntil(
+  //       caches.keys().then(function (cacheNames) {
+  //         caches.delete(cacheName)
+  //       })
+  //     )
+  //   })
+
+  //   //////////
+  var beforeInstallPrompt = null
+  window.addEventListener('beforeinstallprompt', eventHandler, errorHandler)
+
+  function eventHandler(event) {
+    beforeInstallPrompt = event
+    document.getElementById('installBtn').removeAttribute('disabled')
+  }
+  function errorHandler(e) {
+    console.log('error: ' + e)
+  }
+
+  function install() {
+    if (beforeInstallEvent) beforeInstallPrompt.prompt()
+  }
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker
+        .register('/serviceWorker.js')
+        .then((res) => console.log('service worker registered'))
+        .catch((err) => console.log('service worker not registered', err))
+    })
+  }
+</script>
